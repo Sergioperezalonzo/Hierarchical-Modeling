@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Subroutine Hieararchy</title>
+
+<script>
+
+    var canvas;   // The canvas that is used as the drawing surface
+    var graphics; // The 2D graphics context for drawing on the canvas.
+
+    var X_LEFT = -4;    // The xy limits for the coordinate system.
+    var X_RIGHT = 4;
+    var Y_BOTTOM = -3;
+    var Y_TOP = 3;
+    
+    var BACKGROUND = "#F9E79F";  // The display is filled with this color before the scene is drawn.
+         
+    var pixelSize;  // The size of one pixel, in the transformed coordinates.
+            
+    var frameNumber = 0;  // Current frame number. goes up by one in each frame.
+
+    // TODO:  Define any other necessary state variables.
+    
+    /**
+     *  Responsible for drawing the entire scene.  The display is filled with the background
+     *  color before this function is called.
+     */
+	
+	var  width1 = 0; // starts at 10
+	var height1 = 0; // starts 1
+	
+	var  width2 = 0; // starts at 0.60
+	var height2 = 0; // starts 0.60
+	
+	var  width3 = 0; // starts at 0.30
+	var height3 = 0; // starts 0.30
+	
+	var  width4 = 0; // starts at 0.20
+	var height4 = 0; // starts 0.20
+	
+	var  width5 = 0; // starts at 0.15
+	var height5 = 0; // starts 0.15
+	
+	var go1 = false;
+	var go2 = false;
+	var go3 = false;
+	var go4 = false;
+	
+    function drawWorld() {
+
+		//will draw the outter circle in the frame 
+		graphics.save();
+		graphics.rotate( (frameNumber*0.75) * Math.PI/9200 );
+		graphics.scale(width1,height1);
+		graphics.scale(0.09,0.90);
+		scene();
+		graphics.restore();
+
+		
+		if (go1 == true) { // the second outter circle 
+			graphics.save();
+			graphics.rotate( (-frameNumber*0.75) * Math.PI/5200 );
+			graphics.scale(width2,height2); //0.60
+			scene();
+			graphics.restore();
+		}
+		
+		if(go2 == true) { // the third outter circle 
+			graphics.save();
+			graphics.rotate( (frameNumber*0.75) * Math.PI/4200 );
+			graphics.scale(width3,height3);
+			scene();
+			graphics.restore();
+		}
+	
+		if (go3 == true) { // the four outter circle 
+			graphics.save();
+			graphics.rotate( (-frameNumber*0.75) * Math.PI/6200 );
+			graphics.scale(width4,height4);
+			scene();
+			graphics.restore();
+		}
+		
+		if (go4 == true) { // the fifth outter circle 
+			graphics.save();
+			graphics.rotate( (frameNumber*0.75) * Math.PI/5200 );
+			graphics.scale(width5,height5);
+			scene();
+			graphics.restore();
+		}
+		
+    }
+    
+    
+    function scene () { // will draw the object circle with shapes 
+        
+        graphics.rotate( (frameNumber*0.75) * Math.PI/9200 );
+        graphics.save();
+        graphics.fillStyle = "#85c1e9";
+        graphics.scale(3,3);
+		filledCircle(); // the blue circle 
+        graphics.restore();
+        graphics.save();
+    
+		for (var i = 0; i < 10; i++){ // will draw 10 peopel around the blue circle 
+            graphics.save();
+            graphics.rotate( (frameNumber*0.75) * Math.PI ); 
+			graphics.save();
+			graphics.translate(0,1.9);
+			graphics.scale(0.80,0.80);
+			people();
+			graphics.restore();
+			updateFrame();
+			graphics.restore();
+		}
+		
+		graphics.restore();
+      
+    }
+    
+	function people (){ // will draw a person with two circles 
+		graphics.save(); // top circle
+        graphics.fillStyle = "#ec7063";
+        filledCircle();
+        graphics.restore();
+		
+        graphics.save(); // bottom circle
+        graphics.fillStyle = "#7dcea0";
+        graphics.translate(0,0.85);
+        graphics.scale(0.70,0.70);
+        filledCircle();
+        graphics.restore();
+		
+        graphics.save(); // left eye
+        graphics.fillStyle = "#ec7063";
+        graphics.translate(-0.1,0.95);
+        graphics.scale(0.10,0.10);
+        filledCircle();
+        graphics.restore();
+		
+        graphics.save(); // right eye
+        graphics.fillStyle = "#ec7063";
+        graphics.translate(0.1,0.95);
+        graphics.scale(0.10,0.10);
+        filledCircle();
+        graphics.restore();
+        
+        graphics.save(); /// triangle inside the top circle on the person 
+        graphics.fillStyle = "#f4d03f";
+        graphics.translate(0,1.1);
+        graphics.scale(0.50,0.50);
+        filledTriangle(graphics);
+        graphics.restore();
+		
+		graphics.save();
+		for (var i = 0; i < 10; i++) { // will draw the lines inside the bottom circle 
+			graphics.rotate( (frameNumber*0.75) * Math.PI/180 );
+			graphics.strokeStyle = "    #C39BD3     ";
+			line();
+		}
+		graphics.restore();
+        
+    }
+    
+   
+    /**
+     * This method is called just before each frame is drawn.  It updates the modeling
+     * transformations of the objects in the scene that are animated.
+     */
+    function updateFrame() {
+        frameNumber++;
+        // TODO: If other updates are needed for the next frame, do them here.
+		//go2 = true;
+		if (width1 <= 10) {
+			width1 = width1 + 1/100; // the firsr object will be drawn 
+		}
+		if (height1 <= 1){
+			height1 = height1 + 0.10/100;
+		} else {
+			go1 = true;
+			if (width2 <= 0.60) { /// second object will be drawn 
+				width2 = width2 + 0.10/500;
+			}	
+			if (height2 <= 0.60) {
+				height2 = height2 + 0.10/500;
+				go2 = true;
+				if (width3 <= 0.30){
+					width3 = width3 + 0.10/500; // third object will be drawn 
+				}
+				if (height3 <= 0.30) {
+					height3 = height3 + 0.10/500;
+					go3 = true;
+					if (width4 <= 0.20){
+						width4 = width4 + 0.10/500; // the four object will be drawn 
+					}
+					if (height4 <= 0.20) {
+						height4 = height4 + 0.10/500;	
+					} 
+					}  else {
+						go4 = true;
+						if (width5 <= 0.15){
+							width5 = width5 + 0.10/500; // the fifth object will be drawn 
+						}
+						if (height5 <= 0.15) {
+							height5 = height5 + 0.10/500;	
+						}  
+						
+					}
+				
+			} 
+			
+		}
+				
+	}
+    //------------------- Some methods for drawing basic shapes. ----------------
+    
+    function line() { // Draws a line from (-0.5,0) to (0.5,0)
+        graphics.beginPath();
+        graphics.moveTo(-0.5,0);
+        graphics.lineTo(0.5,0);
+        graphics.stroke();
+    }
+
+    function rect() { // Strokes a square, size = 1, center = (0,0)
+        graphics.strokeRect(-0.5,-0.5,1,1);
+    }
+
+    function filledRect() { // Fills a square, size = 1, center = (0,0)
+        graphics.fillRect(-0.5,-0.5,1,1);
+    }
+
+    function circle() { // Strokes a circle, diameter = 1, center = (0,0)
+        graphics.beginPath();
+        graphics.arc(0,0,0.5,0,2*Math.PI);
+        graphics.stroke();
+    }
+
+    function filledCircle() { // Fills a circle, diameter = 1, center = (0,0)
+        graphics.beginPath();
+        graphics.arc(0,0,0.5,0,2*Math.PI);
+        graphics.fill();
+    }
+
+    function filledTriangle(g2) {// Filled Triangle, width 1, height 1, center of base at (0,0)
+        g2.beginPath();
+        g2.moveTo(-0.5,0);
+        g2.lineTo(0.5,0);
+        g2.lineTo(0,1);
+        g2.closePath();
+        g2.fill();
+    }
+
+ 
+
+    
+    // ------------------------------- graphics support functions --------------------------
+    
+    /**
+      * Draw one frame of the animation.  Probably doesn't need to be changed,
+      * except maybe to change the setting of preserveAspect in applyLimits().
+      */
+    function draw() {
+        graphics.save();  // to make sure changes don't carry over from one call to the next
+        graphics.fillStyle = BACKGROUND;  // background color
+        graphics.fillRect(0,0,canvas.width,canvas.height);
+        graphics.fillStyle = "black";
+        applyLimits(graphics,X_LEFT,X_RIGHT,Y_TOP,Y_BOTTOM,false);
+        graphics.lineWidth = pixelSize;  // Use 1 pixel as the default line width
+        drawWorld();
+        graphics.restore();
+    }
+    
+    /**
+     * Applies a coordinate transformation to the graphics context, to map
+     * xleft,xright,ytop,ybottom to the edges of the canvas.  This is called
+     * by draw().  This does not need to be changed.
+     */
+    function applyLimits(g, xleft, xright, ytop, ybottom, preserveAspect) {
+       var width = canvas.width;   // The width of this drawing area, in pixels.
+       var height = canvas.height; // The height of this drawing area, in pixels.
+       if (preserveAspect) {
+             // Adjust the limits to match the aspect ratio of the drawing area.
+          var displayAspect = Math.abs(height / width);
+          var requestedAspect = Math.abs(( ybottom-ytop ) / ( xright-xleft ));
+          var excess;
+          if (displayAspect > requestedAspect) {
+             excess = (ybottom-ytop) * (displayAspect/requestedAspect - 1);
+             ybottom += excess/2;
+             ytop -= excess/2;
+          }
+          else if (displayAspect < requestedAspect) {
+             excess = (xright-xleft) * (requestedAspect/displayAspect - 1);
+             xright += excess/2;
+             xleft -= excess/2;
+          }
+       }
+       var pixelWidth = Math.abs(( xright - xleft ) / width);
+       var pixelHeight = Math.abs(( ybottom - ytop ) / height);
+       pixelSize = Math.min(pixelWidth,pixelHeight);
+       g.scale( width / (xright-xleft), height / (ybottom-ytop) );
+       g.translate( -xleft, -ytop );
+    }
+    
+    
+    //------------------ Animation framework ------------------------------
+    
+    var running = false;  // This is set to true when animation is running
+    
+    function frame() {
+        if (running) {
+               // Draw one frame of the animation, and schedule the next frame.
+            updateFrame();
+             draw();
+            requestAnimationFrame(frame);
+        }
+    }
+    
+    function doAnimationCheckbox() { 
+        var shouldRun = document.getElementById("animateCheck").checked;
+        if ( shouldRun != running ) {
+            running = shouldRun;
+            if (running)
+                requestAnimationFrame(frame);
+        }
+    }
+    
+    //----------------------- initialization -------------------------------
+
+    function init() {
+        canvas = document.getElementById("thecanvas");
+        if (!canvas.getContext) {
+            document.getElementById("message").innerHTML = "ERROR: Canvas not supported";
+            return;
+        }
+        graphics = canvas.getContext("2d");
+        document.getElementById("animateCheck").checked = false; 
+        document.getElementById("animateCheck").onchange = doAnimationCheckbox; 
+        draw();
+    }
+
+</script>
+
+</head>
+
+<body onload="init()" style="background-color:#EEEEEE">
+
+<h3>Subroutine Hierarchy</h3>
+
+<noscript>
+   <p><b style="color:red">Error: This page requires JavaScript, but it is not available.</b></p>
+</noscript>
+
+<p id="message"><label><input type="checkbox" id="animateCheck"><b>Run the Animation</b></label></p>
+
+<div style="float:left; border: 2px solid black">
+<canvas id="thecanvas" width="800" height="600" style="display:block"></canvas>
+</div>
+</body>
+</html>
